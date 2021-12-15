@@ -4,7 +4,9 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
@@ -23,7 +25,7 @@ public class M0705 extends AppCompatActivity implements
         AdapterView.OnItemClickListener
 {
 
-    private ImageView txtComPlay;
+    private ImageSwitcher txtComPlay;
     private TextView txtSelect;
     private TextView txtResult;
     private ImageButton btnscissors,btnstone,btnnet;
@@ -32,6 +34,7 @@ public class M0705 extends AppCompatActivity implements
     private String answer;
     private MediaPlayer startmusic,mediawin,medialose,mediavctory,mediaend;
     private RelativeLayout r_layout;
+    private ImageSwitcher imgSwi_comp;
 
 
     @Override
@@ -42,12 +45,16 @@ public class M0705 extends AppCompatActivity implements
     }
 
     private void setupViewComponent() {
-        txtComPlay = (ImageView)findViewById(R.id.m0705_c001);       //電腦選擇
+
         txtSelect = (TextView)findViewById(R.id.m0705_s001);           //選擇結果
         txtResult = (TextView)findViewById(R.id.m0705_f000);        //輸贏判斷
         btnscissors = (ImageButton)findViewById(R.id.m0705_b001);       //剪刀
         btnstone = (ImageButton)findViewById(R.id.m0705_b002);            //石頭
         btnnet = (ImageButton)findViewById(R.id.m0705_b003);               //布
+
+        //-----------------------電腦出拳
+        txtComPlay = (ImageSwitcher)findViewById(R.id.m0705_c001);       //電腦選擇
+       txtComPlay.setFactory(this);
 
 
         // ---開機動畫---
@@ -71,12 +78,15 @@ public class M0705 extends AppCompatActivity implements
         btnscissors.setOnClickListener(btn01On);
         btnstone.setOnClickListener(btn01On);
         btnnet.setOnClickListener(btn01On);
-
+        
+        u_setAlpha();
+        
 
 
     }
-    
 
+    private void u_setAlpha() {
+    }
 
 
     private View.OnClickListener btn01On=new View.OnClickListener() {
@@ -84,6 +94,14 @@ public class M0705 extends AppCompatActivity implements
 
         @Override
         public void onClick(View v) {
+//            imgSwi_comp.clearAnimation();
+//            Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_scale_rotate_in);
+//            anim.setInterpolator(new BounceInterpolator());
+//            imgSwi_comp.setInAnimation(anim);
+
+
+
+
 
 
 
@@ -108,7 +126,8 @@ public class M0705 extends AppCompatActivity implements
 
                 case R.id.m0705_b001:                                         //玩家選剪刀
                     user_select=getString(R.string.m0705_s001)+" "+getString(R.string.m0705_b001);
-                    u_01();
+//                    u_01();
+                    u_setAlpha();
                     btnscissors.getBackground().setAlpha(150);
                     switch (icomp){
                         case 1:
@@ -140,7 +159,8 @@ public class M0705 extends AppCompatActivity implements
                     break;
                 case R.id.m0705_b002:                                       //玩家選擇石頭
                     user_select=getString(R.string.m0705_s001)+" "+getString(R.string.m0705_b002);
-                    u_01();
+//                    u_01();
+                    u_setAlpha();
                     btnstone.getBackground().setAlpha(150);
                     switch (icomp){
                         case 1:
@@ -166,7 +186,8 @@ public class M0705 extends AppCompatActivity implements
                     break;
                 case R.id.m0705_b003:                                             //玩家選擇布
                     user_select=getString(R.string.m0705_s001)+" "+getString(R.string.m0705_b003);
-                    u_01();
+//                    u_01();
+                    u_setAlpha();
                     btnnet.getBackground().setAlpha(150);
                     switch (icomp){
                         case 1:
@@ -192,8 +213,27 @@ public class M0705 extends AppCompatActivity implements
                     break;
 
             }
+            //-----------------------------------------------------------------電腦出拳增加動畫
+            txtComPlay.clearAnimation();
+            Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_trans_bounce);
+            anim.setInterpolator(new BounceInterpolator());
+            txtComPlay.setInAnimation(anim);
+
             txtSelect.setText(user_select);                                    //選擇結果
             txtResult.setText(answer);                                         //判斷輸贏
+        }
+
+        private void u_setAlpha() {
+
+            //------------------動畫背景
+
+            btnscissors.setBackgroundResource(R.drawable.circle_shape);
+            btnscissors.getBackground().setAlpha(0);
+            btnstone.setBackgroundResource(R.drawable.circle_shape);
+            btnstone.getBackground().setAlpha(0);
+            btnnet.setBackgroundResource(R.drawable.ring);
+            btnnet.getBackground().setAlpha(0);
+
         }
 
 
@@ -207,12 +247,12 @@ public class M0705 extends AppCompatActivity implements
 //        btnStone.getBackground().setAlpha(0);
 //        btnNet.setBackgroundColor(ContextCompat.getColor(this, R.color.Silver));
 //        btnNet.getBackground().setAlpha(0);
-        btnscissors.setBackgroundColor(Color.GRAY);
-        btnscissors.getBackground().setAlpha(0);
-        btnstone.setBackgroundColor(Color.GRAY);
-        btnstone.getBackground().setAlpha(0);
-        btnnet.setBackgroundColor(Color.GRAY);
-        btnnet.getBackground().setAlpha(0);
+//        btnscissors.setBackgroundColor(Color.GRAY);
+//        btnscissors.getBackground().setAlpha(0);
+//        btnstone.setBackgroundColor(Color.GRAY);
+//        btnstone.getBackground().setAlpha(0);
+//        btnnet.setBackgroundColor(Color.GRAY);
+//        btnnet.getBackground().setAlpha(0);
     }
 
     private void music(int i) {
